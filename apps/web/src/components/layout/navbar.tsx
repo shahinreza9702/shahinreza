@@ -10,7 +10,7 @@ const navLinks = [
   { label: "About", href: "/about", section: false },
   { label: "Skills", href: "/#skills", section: true },
   { label: "Projects", href: "/projects", section: false },
-  { label: "Blog", href: "/#blog", section: true },
+  { label: "Blog", href: "/blog", section: false },
 ];
 
 export default function Navbar() {
