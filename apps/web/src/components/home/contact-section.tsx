@@ -6,8 +6,8 @@ import { useState } from "react";
 const contactDetails = [
   {
     label: "Email",
-    value: "iamshahinreza@gmail.com",
-    href: "mailto:iamshahinreza@gmail.com",
+    value: "shahinreza.dev@gmail.com",
+    href: "mailto:shahinreza.dev@gmail.com",
     icon: "✉",
   },
   {
