@@ -24,6 +24,8 @@ const contactDetails = [
   },
 ];
 
+type FormStatus = "idle" | "error" | "success";
+
 export default function ContactSection() {
   const [formData, setFormData] = useState({
     name: "",
@@ -32,24 +34,48 @@ export default function ContactSection() {
     message: "",
   });
 
+  const [formStatus, setFormStatus] = useState<FormStatus>("idle");
+
   function handleChange(
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) {
-    setFormData({
-      ...formData,
-      [event.target.name]: event.target.value,
-    });
+    const { name, value } = event.target;
+
+    setFormData((previous) => ({
+      ...previous,
+      [name]: value,
+    }));
+
+    setFormStatus("idle");
   }
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    // Backend integration will be added later.
+
+    const name = formData.name.trim();
+    const email = formData.email.trim();
+    const subject = formData.subject.trim();
+    const message = formData.message.trim();
+
+    if (!name || !email || !subject || !message) {
+      setFormStatus("error");
+      return;
+    }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailPattern.test(email)) {
+      setFormStatus("error");
+      return;
+    }
+
+    setFormStatus("success");
   }
 
   return (
     <section id="contact" className="section-padding">
       <div className="container-custom">
-        {/* Heading */}
+        {/* Section Heading */}
         <div className="mb-14 text-center">
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.25em] text-primary">
             Get In Touch
@@ -104,10 +130,12 @@ export default function ContactSection() {
                 ))}
               </div>
 
+              {/* Opportunity Card */}
               <div className="mt-8 rounded-xl border border-primary/20 bg-primary/5 p-5">
                 <p className="text-sm font-semibold text-white">
                   Open to opportunities
                 </p>
+
                 <p className="mt-2 text-xs leading-6 text-muted">
                   Interested in connecting with people and exploring
                   opportunities in web development.
@@ -131,6 +159,7 @@ export default function ContactSection() {
               </p>
 
               <div className="mt-7 grid gap-5 sm:grid-cols-2">
+                {/* Name */}
                 <div>
                   <label
                     htmlFor="contact-name"
@@ -138,6 +167,7 @@ export default function ContactSection() {
                   >
                     Your Name
                   </label>
+
                   <input
                     id="contact-name"
                     name="name"
@@ -146,10 +176,11 @@ export default function ContactSection() {
                     value={formData.name}
                     onChange={handleChange}
                     placeholder="Enter your name"
-                    className="w-full rounded-xl border border-border bg-white/[0.03] px-4 py-3 text-sm text-white outline-none transition focus:border-primary"
+                    className="w-full rounded-xl border border-border bg-white/[0.03] px-4 py-3 text-sm text-white outline-none transition duration-300 placeholder:text-gray-500 focus:border-primary focus:ring-2 focus:ring-primary/20"
                   />
                 </div>
 
+                {/* Email */}
                 <div>
                   <label
                     htmlFor="contact-email"
@@ -157,6 +188,7 @@ export default function ContactSection() {
                   >
                     Your Email
                   </label>
+
                   <input
                     id="contact-email"
                     name="email"
@@ -165,10 +197,11 @@ export default function ContactSection() {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="Enter your email"
-                    className="w-full rounded-xl border border-border bg-white/[0.03] px-4 py-3 text-sm text-white outline-none transition focus:border-primary"
+                    className="w-full rounded-xl border border-border bg-white/[0.03] px-4 py-3 text-sm text-white outline-none transition duration-300 placeholder:text-gray-500 focus:border-primary focus:ring-2 focus:ring-primary/20"
                   />
                 </div>
 
+                {/* Subject */}
                 <div className="sm:col-span-2">
                   <label
                     htmlFor="contact-subject"
@@ -176,6 +209,7 @@ export default function ContactSection() {
                   >
                     Subject
                   </label>
+
                   <input
                     id="contact-subject"
                     name="subject"
@@ -184,10 +218,11 @@ export default function ContactSection() {
                     value={formData.subject}
                     onChange={handleChange}
                     placeholder="What is this about?"
-                    className="w-full rounded-xl border border-border bg-white/[0.03] px-4 py-3 text-sm text-white outline-none transition focus:border-primary"
+                    className="w-full rounded-xl border border-border bg-white/[0.03] px-4 py-3 text-sm text-white outline-none transition duration-300 placeholder:text-gray-500 focus:border-primary focus:ring-2 focus:ring-primary/20"
                   />
                 </div>
 
+                {/* Message */}
                 <div className="sm:col-span-2">
                   <label
                     htmlFor="contact-message"
@@ -195,6 +230,7 @@ export default function ContactSection() {
                   >
                     Message
                   </label>
+
                   <textarea
                     id="contact-message"
                     name="message"
@@ -203,21 +239,44 @@ export default function ContactSection() {
                     value={formData.message}
                     onChange={handleChange}
                     placeholder="Write your message..."
-                    className="w-full resize-y rounded-xl border border-border bg-white/[0.03] px-4 py-3 text-sm text-white outline-none transition focus:border-primary"
+                    className="w-full resize-y rounded-xl border border-border bg-white/[0.03] px-4 py-3 text-sm text-white outline-none transition duration-300 placeholder:text-gray-500 focus:border-primary focus:ring-2 focus:ring-primary/20"
                   />
                 </div>
               </div>
 
+              {/* Submit Button */}
               <button
                 type="submit"
                 className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-violet-600 px-6 py-3.5 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/20 sm:w-auto"
               >
-                Send Message
+                Validate Message
+
                 <span aria-hidden="true">→</span>
               </button>
 
+              {/* Form Feedback */}
+              {formStatus === "error" && (
+                <p
+                  role="alert"
+                  className="mt-4 rounded-lg border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-400"
+                >
+                  Please fill in all fields with valid information.
+                </p>
+              )}
+
+              {formStatus === "success" && (
+                <p
+                  role="status"
+                  className="mt-4 rounded-lg border border-green-500/20 bg-green-500/10 p-3 text-sm text-green-400"
+                >
+                  Your information looks valid! Message delivery will be
+                  available after backend integration.
+                </p>
+              )}
+
               <p className="mt-4 text-xs leading-5 text-muted">
-                Message delivery will be enabled after backend integration.
+                This form currently validates your information only.
+                Message delivery is not available yet.
               </p>
             </form>
           </div>
