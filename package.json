@@ -1,0 +1,17 @@
+
+{
+  "name": "shahinreza-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Shahin Reza - Full Stack Developer Portfolio",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace @shahin-portfolio/web",
+    "dev:web": "npm run dev --workspace @shahin-portfolio/web",
+    "build": "npm run build --workspace @shahin-portfolio/web",
+    "build:web": "npm run build --workspace @shahin-portfolio/web",
+    "lint": "npm run lint --workspace @shahin-portfolio/web"
+  }
+}
