@@ -17,13 +17,18 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://shahinreza.vercel.app"),
+
   title: {
     default: "Shahin Reza | Web Developer",
     template: "%s | Shahin Reza",
   },
+
   description:
     "Explore Shahin Reza's portfolio, web development projects, technical skills, and professional journey.",
+
   applicationName: "Shahin Reza Portfolio",
+
   keywords: [
     "Shahin Reza",
     "Web Developer",
@@ -32,11 +37,29 @@ export const metadata: Metadata = {
     "Next.js Developer",
     "JavaScript Developer",
   ],
+
   authors: [{ name: "Shahin Reza" }],
   creator: "Shahin Reza",
+
   robots: {
     index: true,
     follow: true,
+  },
+
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: "Shahin Reza Portfolio",
+    title: "Shahin Reza | Web Developer",
+    description:
+      "Explore Shahin Reza's portfolio, web development projects, technical skills, and professional journey.",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Shahin Reza | Web Developer",
+    description:
+      "Explore Shahin Reza's portfolio, web development projects, technical skills, and professional journey.",
   },
 };
 

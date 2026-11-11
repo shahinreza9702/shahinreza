@@ -20,6 +20,7 @@ export function generateStaticParams() {
     }));
 }
 
+
 export async function generateMetadata({
     params,
 }: ProjectPageProps): Promise<Metadata> {
@@ -29,14 +30,50 @@ export async function generateMetadata({
     if (!project) {
         return {
             title: "Project Not Found",
+            description: "The requested project could not be found.",
+            robots: {
+                index: false,
+                follow: false,
+            },
         };
     }
+
+    const image = project.images[0];
 
     return {
         title: project.name,
         description: project.description,
+
+        alternates: {
+            canonical: `/projects/${project.slug}`,
+        },
+
+        openGraph: {
+            type: "website",
+            title: `${project.name} | Shahin Reza`,
+            description: project.description,
+            url: `/projects/${project.slug}`,
+            images: image
+                ? [
+                    {
+                        url: image.src,
+                        width: 1200,
+                        height: 630,
+                        alt: image.alt,
+                    },
+                ]
+                : undefined,
+        },
+
+        twitter: {
+            card: "summary_large_image",
+            title: `${project.name} | Shahin Reza`,
+            description: project.description,
+            images: image ? [image.src] : undefined,
+        },
     };
 }
+
 
 export default async function ProjectDetailsPage({
     params,

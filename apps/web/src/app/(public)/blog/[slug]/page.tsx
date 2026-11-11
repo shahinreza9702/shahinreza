@@ -18,6 +18,7 @@ export function generateStaticParams() {
   }));
 }
 
+
 export async function generateMetadata({
   params,
 }: BlogDetailsPageProps): Promise<Metadata> {
@@ -27,14 +28,44 @@ export async function generateMetadata({
   if (!blog) {
     return {
       title: "Article Not Found",
+      description: "The requested article could not be found.",
+      robots: {
+        index: false,
+        follow: false,
+      },
     };
   }
+
+  const isPublished = blog.status === "published";
 
   return {
     title: blog.title,
     description: blog.description,
+
+    alternates: {
+      canonical: `/blog/${blog.slug}`,
+    },
+
+    robots: {
+      index: isPublished,
+      follow: true,
+    },
+
+    openGraph: {
+      type: isPublished ? "article" : "website",
+      title: `${blog.title} | Shahin Reza`,
+      description: blog.description,
+      url: `/blog/${blog.slug}`,
+    },
+
+    twitter: {
+      card: "summary",
+      title: `${blog.title} | Shahin Reza`,
+      description: blog.description,
+    },
   };
 }
+
 
 export default async function BlogDetailsPage({
   params,
