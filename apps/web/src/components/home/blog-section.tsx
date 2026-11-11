@@ -1,36 +1,5 @@
 
-const articles = [
-  {
-    number: "01",
-    category: "Frontend Development",
-    title: "Building Better User Experiences with React",
-    description:
-      "Exploring component-based architecture, reusable UI, and practical ways to build user-friendly web applications.",
-    tags: ["React", "JavaScript"],
-    initials: "RE",
-    gradient: "from-violet-600/30 via-purple-500/10 to-transparent",
-  },
-  {
-    number: "02",
-    category: "Web Development",
-    title: "Getting Started with Next.js",
-    description:
-      "An introduction to modern web development with Next.js, routing, rendering, and project structure.",
-    tags: ["Next.js", "TypeScript"],
-    initials: "NX",
-    gradient: "from-blue-600/30 via-cyan-500/10 to-transparent",
-  },
-  {
-    number: "03",
-    category: "Learning & Growth",
-    title: "My Journey into Web Development",
-    description:
-      "Sharing lessons, challenges, and experiences from my journey of learning modern web development.",
-    tags: ["Learning", "Career"],
-    initials: "DEV",
-    gradient: "from-pink-600/30 via-fuchsia-500/10 to-transparent",
-  },
-];
+import { blogs } from "@/data/blogs";
 
 export default function BlogSection() {
   return (
@@ -60,9 +29,9 @@ export default function BlogSection() {
 
         {/* Blog Cards */}
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {articles.map((article) => (
+          {blogs.map((article) => (
             <article
-              key={article.number}
+              key={article.slug}
               className="glass-panel group overflow-hidden rounded-2xl transition-all duration-300 hover:-translate-y-2 hover:border-primary/40 hover:shadow-xl hover:shadow-purple-500/10"
             >
               {/* Article Visual */}
@@ -89,7 +58,9 @@ export default function BlogSection() {
               {/* Article Information */}
               <div className="p-5 sm:p-6">
                 <span className="text-xs font-semibold text-primary">
-                  COMING SOON
+                  {article.status === "published"
+                    ? "PUBLISHED"
+                    : "COMING SOON"}
                 </span>
 
                 <h3 className="mt-3 text-xl font-bold leading-snug transition-colors group-hover:text-primary">
@@ -113,7 +84,10 @@ export default function BlogSection() {
 
                 <div className="mt-6 border-t border-border pt-5">
                   <span className="inline-flex items-center gap-2 text-sm font-semibold text-muted">
-                    Article in preparation
+                    {article.status === "published"
+                      ? "Read Article"
+                      : "Article in preparation"}
+
                     <span aria-hidden="true">↗</span>
                   </span>
                 </div>
