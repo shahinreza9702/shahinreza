@@ -5,6 +5,8 @@ import morgan from "morgan";
 
 import errorHandler from "./middlewares/errorHandler.js";
 import notFound from "./middlewares/notFound.js";
+import blogRoutes from "./routes/blog.routes.js";
+import projectRoutes from "./routes/project.routes.js";
 
 const app = express();
 
@@ -28,6 +30,8 @@ app.get("/api/health", (_req, res) => {
   });
 });
 
+app.use("/api/blogs", blogRoutes);
+app.use("/api/projects", projectRoutes);
 
 // Handle unknown routes
 app.use(notFound);

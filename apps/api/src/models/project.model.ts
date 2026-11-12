@@ -1,5 +1,5 @@
 
-import { InferSchemaType, model, models, Schema } from "mongoose";
+import mongoose, { InferSchemaType, Schema } from "mongoose";
 
 const projectImageSchema = new Schema(
   {
@@ -138,6 +138,7 @@ projectSchema.index({ isFeatured: -1, sortOrder: 1 });
 
 export type ProjectDocument = InferSchemaType<typeof projectSchema>;
 
-const Project = models.Project || model("Project", projectSchema);
+const Project =
+  mongoose.models.Project || mongoose.model("Project", projectSchema);
 
 export default Project;

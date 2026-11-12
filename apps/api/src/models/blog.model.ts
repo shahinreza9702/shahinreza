@@ -1,5 +1,5 @@
 
-import { InferSchemaType, model, models, Schema } from "mongoose";
+import mongoose, { InferSchemaType, Schema } from "mongoose";
 
 const blogContentBlockSchema = new Schema(
   {
@@ -127,6 +127,6 @@ const blogSchema = new Schema(
 
 export type BlogDocument = InferSchemaType<typeof blogSchema>;
 
-const Blog = models.Blog || model("Blog", blogSchema);
+const Blog = mongoose.models.Blog || mongoose.model("Blog", blogSchema);
 
 export default Blog;
