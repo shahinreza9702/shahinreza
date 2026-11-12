@@ -10,8 +10,10 @@
   "scripts": {
     "dev": "npm run dev --workspace @shahin-portfolio/web",
     "dev:web": "npm run dev --workspace @shahin-portfolio/web",
+    "dev:api": "npm run dev --workspace @shahin-portfolio/api",
     "build": "npm run build --workspace @shahin-portfolio/web",
     "build:web": "npm run build --workspace @shahin-portfolio/web",
+    "build:api": "npm run build --workspace @shahin-portfolio/api",
     "lint": "npm run lint --workspace @shahin-portfolio/web"
   }
 }
