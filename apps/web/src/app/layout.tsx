@@ -50,6 +50,10 @@ const jsonLd = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
+  
+  alternates: {
+    canonical: "/",
+  },
 
   title: {
     default: "Shahin Reza | Web Developer",

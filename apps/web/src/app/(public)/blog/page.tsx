@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   title: "Blog",
   description:
     "Explore articles about frontend development, React, Next.js, and the journey of learning web development.",
+  alternates: {
+    canonical: "/blog",
+  },
 };
 
 export default function BlogPage() {

@@ -37,6 +37,9 @@ export const metadata: Metadata = {
   title: "About Me",
   description:
     "Learn more about Shahin Reza, his web development journey, technical interests and approach to building digital products.",
+  alternates: {
+    canonical: "/about",
+  },
 };
 
 export default function AboutPage() {
