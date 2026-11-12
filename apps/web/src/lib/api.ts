@@ -5,6 +5,16 @@ if (!API_URL) {
   throw new Error("NEXT_PUBLIC_API_URL is not configured.");
 }
 
+export class ApiRequestError extends Error {
+  status: number;
+
+  constructor(message: string, status: number) {
+    super(message);
+    this.name = "ApiRequestError";
+    this.status = status;
+  }
+}
+
 interface ApiOptions extends RequestInit {
   credentials?: RequestCredentials;
 }
@@ -22,11 +32,12 @@ export async function apiRequest<T>(
     },
   });
 
-  const result = await response.json();
+  const result = await response.json().catch(() => ({}));
 
   if (!response.ok) {
-    throw new Error(
+    throw new ApiRequestError(
       result.message || "Something went wrong. Please try again.",
+      response.status,
     );
   }
 
