@@ -3,6 +3,9 @@ import express from "express";
 import helmet from "helmet";
 import morgan from "morgan";
 
+import errorHandler from "./middlewares/errorHandler.js";
+import notFound from "./middlewares/notFound.js";
+
 const app = express();
 
 app.use(helmet());
@@ -24,5 +27,12 @@ app.get("/api/health", (_req, res) => {
     message: "Shahin Portfolio API is running.",
   });
 });
+
+
+// Handle unknown routes
+app.use(notFound);
+
+// Centralized error handler (must be registered last)
+app.use(errorHandler);
 
 export default app;
