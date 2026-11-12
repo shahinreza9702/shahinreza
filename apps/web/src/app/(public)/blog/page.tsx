@@ -83,7 +83,7 @@ export default function BlogPage() {
               >
                 {/* Article Visual */}
                 <div
-                  className={`relative flex aspect-[16/10] items-center justify-center overflow-hidden bg-gradient-to-br ${article.gradient}`}
+                  className={`relative flex aspect-16/10 items-center justify-center overflow-hidden bg-linear-to-br ${article.gradient}`}
                 >
                   <div className="absolute inset-0 grid-pattern opacity-40" />
 
@@ -128,7 +128,7 @@ export default function BlogPage() {
                     {article.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="rounded-md border border-border bg-white/[0.03] px-2.5 py-1.5 text-xs text-gray-300"
+                        className="rounded-md border border-border bg-white/3 px-2.5 py-1.5 text-xs text-gray-300"
                       >
                         {tag}
                       </span>
