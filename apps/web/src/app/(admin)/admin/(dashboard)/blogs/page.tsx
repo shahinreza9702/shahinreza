@@ -53,6 +53,11 @@ export default function AdminBlogsPage() {
             setLoading(false);
         }
     }, []);
+    
+    useEffect(() => {
+        void fetchBlogs();
+    }, [fetchBlogs]);
+
 
     const filteredBlogs = useMemo(() => {
         const query = search.trim().toLowerCase();
