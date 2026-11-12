@@ -10,6 +10,7 @@ import notFound from "./middlewares/notFound.js";
 import blogRoutes from "./routes/blog.routes.js";
 import projectRoutes from "./routes/project.routes.js";
 import authRoutes from "./routes/auth.routes.js";
+import adminBlogRoutes from "./routes/adminBlog.routes.js";
 
 const app = express();
 
@@ -35,6 +36,8 @@ app.get("/api/health", (_req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+
+app.use("/api/admin/blogs", adminBlogRoutes);
 
 app.use("/api/blogs", blogRoutes);
 app.use("/api/projects", projectRoutes);
