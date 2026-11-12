@@ -35,6 +35,7 @@ export default function AdminBlogsPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [deletingId, setDeletingId] = useState<string | null>(null);
+    const [blogToDelete, setBlogToDelete] = useState<Blog | null>(null);
 
     const fetchBlogs = useCallback(async () => {
         try {
@@ -53,7 +54,7 @@ export default function AdminBlogsPage() {
             setLoading(false);
         }
     }, []);
-    
+
     useEffect(() => {
         void fetchBlogs();
     }, [fetchBlogs]);
@@ -85,24 +86,22 @@ export default function AdminBlogsPage() {
         (blog) => blog.status === "draft",
     ).length;
 
-    const handleDelete = async (blog: Blog) => {
-        const confirmed = window.confirm(
-            `Are you sure you want to delete "${blog.title}"? This action cannot be undone.`,
-        );
-
-        if (!confirmed) return;
+    const handleDelete = async () => {
+        if (!blogToDelete) return;
 
         try {
-            setDeletingId(blog._id);
+            setDeletingId(blogToDelete._id);
             setError("");
 
-            await apiRequest(`/admin/blogs/${blog._id}`, {
+            await apiRequest(`/admin/blogs/${blogToDelete._id}`, {
                 method: "DELETE",
             });
 
             setBlogs((current) =>
-                current.filter((item) => item._id !== blog._id),
+                current.filter((item) => item._id !== blogToDelete._id),
             );
+
+            setBlogToDelete(null);
         } catch (err) {
             setError(
                 err instanceof ApiRequestError
@@ -315,7 +314,7 @@ export default function AdminBlogsPage() {
                                                 <button
                                                     type="button"
                                                     disabled={deletingId === blog._id}
-                                                    onClick={() => void handleDelete(blog)}
+                                                    onClick={() => setBlogToDelete(blog)}
                                                     className="text-sm font-medium text-red-400 transition-colors hover:text-red-300 disabled:cursor-not-allowed disabled:opacity-50"
                                                 >
                                                     {deletingId === blog._id
@@ -331,6 +330,80 @@ export default function AdminBlogsPage() {
                     </div>
                 )}
             </section>
+
+            {blogToDelete && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
+                    <div
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="delete-dialog-title"
+                        aria-describedby="delete-dialog-description"
+                        className="w-full max-w-md rounded-2xl border border-border bg-surface p-6 shadow-2xl"
+                    >
+                        <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-red-500/10">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                className="text-red-500"
+                                aria-hidden="true"
+                            >
+                                <path d="M3 6h18" />
+                                <path d="M8 6V4h8v2" />
+                                <path d="m19 6-1 14H6L5 6" />
+                                <path d="M10 11v5" />
+                                <path d="M14 11v5" />
+                            </svg>
+                        </div>
+
+                        <h2
+                            id="delete-dialog-title"
+                            className="text-xl font-semibold text-foreground"
+                        >
+                            Delete Blog Post?
+                        </h2>
+
+                        <p
+                            id="delete-dialog-description"
+                            className="mt-3 text-sm leading-6 text-muted"
+                        >
+                            Are you sure you want to delete{" "}
+                            <span className="font-semibold text-foreground">
+                                &quot;{blogToDelete.title}&quot;
+                            </span>
+                            ? This action cannot be undone.
+                        </p>
+
+                        <div className="mt-7 flex justify-end gap-3">
+                            <button
+                                type="button"
+                                disabled={deletingId !== null}
+                                onClick={() => setBlogToDelete(null)}
+                                className="rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-foreground transition hover:bg-surface-elevated disabled:cursor-not-allowed disabled:opacity-50"
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                type="button"
+                                disabled={deletingId !== null}
+                                onClick={() => void handleDelete()}
+                                className="rounded-lg bg-red-600 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
+                            >
+                                {deletingId === blogToDelete._id
+                                    ? "Deleting..."
+                                    : "Delete Blog"}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
