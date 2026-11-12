@@ -21,6 +21,7 @@ export function generateStaticParams() {
 }
 
 
+
 export async function generateMetadata({
     params,
 }: ProjectPageProps): Promise<Metadata> {
@@ -38,7 +39,11 @@ export async function generateMetadata({
         };
     }
 
-    const image = project.images[0];
+    const imageUrl = project.socialImage ?? project.images[0]?.src;
+
+    const imageAlt = project.socialImage
+        ? `${project.name} - Shahin Reza`
+        : project.images[0]?.alt;
 
     return {
         title: project.name,
@@ -53,13 +58,11 @@ export async function generateMetadata({
             title: `${project.name} | Shahin Reza`,
             description: project.description,
             url: `/projects/${project.slug}`,
-            images: image
+            images: imageUrl
                 ? [
                     {
-                        url: image.src,
-                        width: 1200,
-                        height: 630,
-                        alt: image.alt,
+                        url: imageUrl,
+                        alt: imageAlt ?? `${project.name} project`,
                     },
                 ]
                 : undefined,
@@ -69,7 +72,7 @@ export async function generateMetadata({
             card: "summary_large_image",
             title: `${project.name} | Shahin Reza`,
             description: project.description,
-            images: image ? [image.src] : undefined,
+            images: imageUrl ? [imageUrl] : undefined,
         },
     };
 }

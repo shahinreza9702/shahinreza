@@ -19,6 +19,9 @@ export function generateStaticParams() {
 }
 
 
+
+
+
 export async function generateMetadata({
   params,
 }: BlogDetailsPageProps): Promise<Metadata> {
@@ -38,6 +41,13 @@ export async function generateMetadata({
 
   const isPublished = blog.status === "published";
 
+  const socialImage = blog.coverImage
+    ? {
+        url: blog.coverImage,
+        alt: `${blog.title} - Shahin Reza`,
+      }
+    : undefined;
+
   return {
     title: blog.title,
     description: blog.description,
@@ -56,15 +66,18 @@ export async function generateMetadata({
       title: `${blog.title} | Shahin Reza`,
       description: blog.description,
       url: `/blog/${blog.slug}`,
+      images: socialImage ? [socialImage] : undefined,
     },
 
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title: `${blog.title} | Shahin Reza`,
       description: blog.description,
+      images: socialImage ? [socialImage.url] : undefined,
     },
   };
 }
+
 
 
 export default async function BlogDetailsPage({

@@ -7,6 +7,7 @@ export interface Blog {
   category: string;
   title: string;
   description: string;
+  coverImage?: string;
   tags: string[];
   initials: string;
   gradient: string;

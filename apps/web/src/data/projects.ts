@@ -19,6 +19,7 @@ export interface Project {
     src: string;
     alt: string;
   }[];
+  socialImage?: string;
   liveUrl?: string;
   githubUrl?: string;
 }
