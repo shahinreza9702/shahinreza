@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ApiRequestError, apiRequest } from "@/lib/api";
 
@@ -150,15 +150,6 @@ export default function ProjectForm({
     });
     const [error, setError] = useState("");
     const [isSaving, setIsSaving] = useState(false);
-
-    useEffect(() => {
-        if (!slugManuallyEdited && mode === "create") {
-            setForm((current) => ({
-                ...current,
-                slug: createSlug(current.name),
-            }));
-        }
-    }, [form.name, slugManuallyEdited, mode]);
 
     function updateField<K extends keyof ProjectFormData>(
         field: K,
@@ -326,7 +317,16 @@ export default function ProjectForm({
                             maxLength={120}
                             className={inputClass}
                             value={form.name}
-                            onChange={(e) => updateField("name", e.target.value)}
+                            onChange={(e) => {
+                                const name = e.target.value;
+                                setForm((current) => ({
+                                    ...current,
+                                    name,
+                                    ...(mode === "create" && !slugManuallyEdited
+                                        ? { slug: createSlug(name) }
+                                        : {}),
+                                }));
+                            }}
                             placeholder="e.g. Kindora"
                         />
                     </div>

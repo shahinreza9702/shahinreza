@@ -49,29 +49,22 @@ export default function ProjectsPage() {
     null,
   );
 
-  const loadProjects = useCallback(async () => {
-    setIsLoading(true);
-    setError("");
-
-    try {
-      const response = await apiRequest<AdminProjectsResponse>(
-        "/admin/projects",
-      );
-
-      setProjects(response.data ?? []);
-    } catch (err) {
-      setError(
-        err instanceof ApiRequestError || err instanceof Error
-          ? err.message
-          : "Unable to load projects.",
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+  const loadProjects = useCallback(
+    () => apiRequest<AdminProjectsResponse>("/admin/projects"),
+    [],
+  );
 
   useEffect(() => {
-    void loadProjects();
+    void loadProjects()
+      .then((response) => setProjects(response.data ?? []))
+      .catch((err: unknown) =>
+        setError(
+          err instanceof ApiRequestError || err instanceof Error
+            ? err.message
+            : "Unable to load projects.",
+        ),
+      )
+      .finally(() => setIsLoading(false));
   }, [loadProjects]);
 
   const statistics = useMemo(
@@ -201,7 +194,20 @@ export default function ProjectsPage() {
           <span>{error}</span>
           <button
             type="button"
-            onClick={() => void loadProjects()}
+            onClick={() => {
+              setIsLoading(true);
+              setError("");
+              void loadProjects()
+                .then((response) => setProjects(response.data ?? []))
+                .catch((err: unknown) =>
+                  setError(
+                    err instanceof ApiRequestError || err instanceof Error
+                      ? err.message
+                      : "Unable to load projects.",
+                  ),
+                )
+                .finally(() => setIsLoading(false));
+            }}
             className="font-medium underline"
           >
             Try again

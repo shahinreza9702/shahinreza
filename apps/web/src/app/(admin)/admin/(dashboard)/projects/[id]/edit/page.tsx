@@ -51,29 +51,22 @@ export default function EditProjectPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const loadProject = useCallback(async () => {
-    setIsLoading(true);
-    setError("");
-
-    try {
-      const response = await apiRequest<ProjectResponse>(
-        `/admin/projects/${projectId}`,
-      );
-
-      setProject(response.data);
-    } catch (err) {
-      setError(
-        err instanceof ApiRequestError || err instanceof Error
-          ? err.message
-          : "Unable to load project.",
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  }, [projectId]);
+  const loadProject = useCallback(
+    () => apiRequest<ProjectResponse>(`/admin/projects/${projectId}`),
+    [projectId],
+  );
 
   useEffect(() => {
-    void loadProject();
+    void loadProject()
+      .then((response) => setProject(response.data))
+      .catch((err: unknown) =>
+        setError(
+          err instanceof ApiRequestError || err instanceof Error
+            ? err.message
+            : "Unable to load project.",
+        ),
+      )
+      .finally(() => setIsLoading(false));
   }, [loadProject]);
 
   if (isLoading) {
@@ -95,7 +88,20 @@ export default function EditProjectPage() {
         <div className="mt-6 flex justify-center gap-3">
           <button
             type="button"
-            onClick={() => void loadProject()}
+            onClick={() => {
+              setIsLoading(true);
+              setError("");
+              void loadProject()
+                .then((response) => setProject(response.data))
+                .catch((err: unknown) =>
+                  setError(
+                    err instanceof ApiRequestError || err instanceof Error
+                      ? err.message
+                      : "Unable to load project.",
+                  ),
+                )
+                .finally(() => setIsLoading(false));
+            }}
             className="rounded-xl border border-border px-5 py-3 text-sm"
           >
             Try Again
